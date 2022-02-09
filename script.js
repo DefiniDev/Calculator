@@ -35,13 +35,14 @@ class Calculator {
       this.compute();
     }
     this.operation = operation;
-    this.previousOperand = this.currentOperand;
+    this.previousOperand = Number(this.currentOperand);
     this.currentOperand = "";
   }
 
   compute() {
     let computation;
     const prev = parseFloat(this.previousOperand);
+    console.log(prev);
     const current = parseFloat(this.currentOperand);
     if (isNaN(prev) || isNaN(current)) return;
     switch (this.operation) {
@@ -92,14 +93,9 @@ class Calculator {
     if (this.currentOperandTextElement.innerText === "")
       this.currentOperandTextElement.innerText = "0";
   }
-
-  debug() {
-    console.log("Prev    = ", this.previousOperand);
-    console.log("Current = ", this.currentOperand);
-    console.log("Op      = ", this.operation);
-  }
 }
 
+// - Selectors -
 // Buttons
 const debugButton = document.querySelector("[data-debug]");
 const allClearButton = document.querySelector("[data-all-clear]");
@@ -150,6 +146,8 @@ numberButtons.forEach(button => {
 // Operation buttons
 operationButtons.forEach(button => {
   button.addEventListener("click", () => {
+    // console.log(Number("087"));
+    // console.log(calculator.currentOperand);
     calculator.chooseOperation(button.innerText);
     calculator.updateDisplay();
   });
@@ -157,11 +155,7 @@ operationButtons.forEach(button => {
 
 // Equals button
 equalsButton.addEventListener("click", () => {
+  calculator.previousOperandTextElement.innerText = "";
   calculator.compute();
   calculator.updateDisplay();
-});
-
-// Debug button
-debugButton.addEventListener("click", () => {
-  calculator.debug();
 });
