@@ -19,6 +19,8 @@ class Calculator {
   }
 
   appendNumber(number) {
+    console.log(this.currentOperandTextElement.innerText.length);
+    if (this.currentOperandTextElement.innerText.length === 15) return;
     if (!isFinite(this.currentOperand)) this.currentOperand = "";
     if (number === "." && this.currentOperand.includes(".")) return;
     this.currentOperand = this.currentOperand.toString() + number.toString();
