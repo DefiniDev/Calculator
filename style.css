@@ -59,30 +59,32 @@ button {
 }
 
 #display {
-  background-color: rgb(249, 249, 249);
-  border: 3px rgb(53, 53, 53) solid;
   border-radius: 5px;
   text-align: right;
   color: rgb(53, 53, 53);
   font-size: 4rem;
   font-family: "VT323", monospace;
-  margin: 5px;
-  margin-bottom: 10px;
+  margin: 7px 10px 10px 10px;
 }
 
 .previous-operand {
+  background-color: rgb(243, 243, 243);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.583);
   min-height: 50px;
-  border: 2px rgb(53, 53, 53) solid;
   font-size: 1.9rem;
   padding: 8px 20px 8px 10px;
   word-wrap: break-word;
+  border-radius: 8px;
+  margin-bottom: 15px;
 }
 
 .current-operand {
+  background-color: rgb(243, 243, 243);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.631);
   min-height: 75px;
-  border: 2px rgb(53, 53, 53) solid;
   padding: 10px;
   word-wrap: break-word;
+  border-radius: 8px;
 }
 
 button:hover {
@@ -151,7 +153,7 @@ svg:hover {
 }
 
 /* Media Queries */
-@media only screen and (max-height: 785px) {
+@media only screen and (max-height: 850px) {
   footer {
     display: none;
   }
