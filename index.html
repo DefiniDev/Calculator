@@ -11,30 +11,31 @@
   <body>
     <div class="flex-container-column">
       <main>
+        <button data-debug>Debug</button>
         <div id="display">
-          <div id="display-output"></div>
-          <div id="display-input"></div>
+          <div data-previous-operand class="previous-operand"></div>
+          <div data-current-operand class="current-operand">0</div>
         </div>
         <div class="grid-container">
-          <button id="btn-C">C</button>
-          <button id="btn-Bksp">Bksp</button>
-          <button id="btn-+/-">+/-</button>
-          <button id="btn-/">/</button>
-          <button id="btn-7">7</button>
-          <button id="btn-8">8</button>
-          <button id="btn-9">9</button>
-          <button id="btn-*">*</button>
-          <button id="btn-4">4</button>
-          <button id="btn-5">5</button>
-          <button id="btn-6">6</button>
-          <button id="btn--">-</button>
-          <button id="btn-1">1</button>
-          <button id="btn-2">2</button>
-          <button id="btn-3">3</button>
-          <button id="btn-+">+</button>
-          <button id="btn-0">0</button>
-          <button id="btn-.">.</button>
-          <button id="btn-=">=</button>
+          <button data-all-clear class="btn-blue">C</button>
+          <button data-backspace class="btn-blue">Bksp</button>
+          <button data-polarity class="btn-blue">+/-</button>
+          <button data-operation class="btn-orange">/</button>
+          <button data-number>1</button>
+          <button data-number>2</button>
+          <button data-number>3</button>
+          <button data-operation class="btn-orange">*</button>
+          <button data-number>4</button>
+          <button data-number>5</button>
+          <button data-number>6</button>
+          <button data-operation class="btn-orange">-</button>
+          <button data-number>7</button>
+          <button data-number>8</button>
+          <button data-number>9</button>
+          <button data-operation class="btn-orange">+</button>
+          <button data-number class="span-two">0</button>
+          <button data-number class="btn-blue">.</button>
+          <button data-equals class="btn-blue">=</button>
         </div>
       </main>
     </div>

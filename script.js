@@ -1,125 +1,167 @@
 "use strict";
-function $(x) {
-  return document.getElementById(x);
+class Calculator {
+  constructor(previousOperandTextElement, currentOperandTextElement) {
+    this.previousOperandTextElement = previousOperandTextElement;
+    this.currentOperandTextElement = currentOperandTextElement;
+    this.clear();
+  }
+
+  clear() {
+    this.currentOperand = "";
+    this.previousOperand = "";
+    this.operation = undefined;
+    this.previousOperandTextElement.innerText = "";
+    this.updateDisplay();
+  }
+
+  backspace() {
+    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+  }
+
+  appendNumber(number) {
+    if (number === "." && this.currentOperand.includes(".")) return;
+    this.currentOperand = this.currentOperand.toString() + number.toString();
+  }
+
+  changePolarity() {
+    this.currentOperand = -this.currentOperand;
+    this.updateDisplay();
+  }
+
+  chooseOperation(operation) {
+    if (this.currentOperand === "") return;
+    if (operation === "") return;
+    if (this.previousOperand !== "") {
+      this.compute();
+    }
+    this.operation = operation;
+    this.previousOperand = this.currentOperand;
+    this.currentOperand = "";
+  }
+
+  compute() {
+    let computation;
+    const prev = parseFloat(this.previousOperand);
+    const current = parseFloat(this.currentOperand);
+    if (isNaN(prev) || isNaN(current)) return;
+    switch (this.operation) {
+      case "+":
+        computation = prev + current;
+        break;
+      case "-":
+        computation = prev - current;
+        break;
+      case "*":
+        computation = prev * current;
+        break;
+      case "/":
+        computation = prev / current;
+        break;
+      default:
+        return;
+    }
+    this.currentOperand = computation;
+    this.operation = undefined;
+    this.previousOperand = "";
+  }
+
+  getDisplayNumber(number) {
+    const stringNumber = number.toString();
+    const integerDigits = parseFloat(stringNumber.split(".")[0]);
+    const decimalDigits = stringNumber.split(".")[1];
+    let integerDisplay;
+    if (isNaN(integerDigits)) {
+      integerDisplay = "";
+    } else {
+      integerDisplay = integerDigits.toLocaleString("en", {
+        maximumFractionDigits: 0,
+      });
+    }
+    if (decimalDigits != null) {
+      return `${integerDisplay}.${decimalDigits}`;
+    } else return integerDisplay;
+  }
+
+  updateDisplay() {
+    this.currentOperandTextElement.innerText = this.getDisplayNumber(
+      this.currentOperand
+    );
+    if (this.operation != null) {
+      this.previousOperandTextElement.innerText = `${this.previousOperand} ${this.operation}`;
+    }
+    if (this.currentOperandTextElement.innerText === "")
+      this.currentOperandTextElement.innerText = "0";
+  }
+
+  debug() {
+    console.log("Prev    = ", this.previousOperand);
+    console.log("Current = ", this.currentOperand);
+    console.log("Op      = ", this.operation);
+  }
 }
 
-// CSS Selectors
-// const btnC = document.getElementById("btn-C");
-// const btnBksp = document.getElementById("btn-Bksp");
-// const btnPlusMinus = document.getElementById("btn-+/-");
-// const btnDivide = document.getElementById("btn-/");
-// const btn7 = document.getElementById("btn-7");
-// const btn8 = document.getElementById("btn-8");
-// const btn9 = document.getElementById("btn-9");
-// const btnMultiply = document.getElementById("btn-*");
-// const btn4 = document.getElementById("btn-4");
-// const btn5 = document.getElementById("btn-5");
-// const btn6 = document.getElementById("btn-6");
-// const btnMinus = document.getElementById("btn--");
-// const btn1 = document.getElementById("btn-1");
-// const btn2 = document.getElementById("btn-2");
-// const btn3 = document.getElementById("btn-3");
-// const btnPlus = document.getElementById("btn-+");
-// const btn0 = document.getElementById("btn-0");
-// const btnDecimal = document.getElementById("btn-.");
-// const btnEquals = document.getElementById("btn-=");
-const buttons = document.querySelectorAll("button");
+// Buttons
+const debugButton = document.querySelector("[data-debug]");
+const allClearButton = document.querySelector("[data-all-clear]");
+const backspaceButton = document.querySelector("[data-backspace]");
+const polarityButton = document.querySelector("[data-polarity]");
+const operationButtons = document.querySelectorAll("[data-operation]");
+const numberButtons = document.querySelectorAll("[data-number]");
+const equalsButton = document.querySelector("[data-equals]");
+// Displays
+const previousOperandTextElement = document.querySelector(
+  "[data-previous-operand]"
+);
+const currentOperandTextElement = document.querySelector(
+  "[data-current-operand]"
+);
 
-const add = (a, b) => a + b;
-const subtract = (a, b) => a - b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
-const operate = (operand, a, b) => {
-  return operand(a, b);
-};
+const calculator = new Calculator(
+  previousOperandTextElement,
+  currentOperandTextElement
+);
 
-console.log(operate(subtract, 2, 3));
-let displayValue = "";
-let previousValue = "";
-let currentOp = "";
-
-//-----------------------------------------------------------------------
-$("btn-C").addEventListener("click", () => {
-  displayValue = "";
-  previousValue = "";
-  $("display-input").textContent = displayValue;
-  $("display-output").textContent = previousValue;
+// - Event listeners -
+// All-clear button
+allClearButton.addEventListener("click", () => {
+  calculator.clear();
+  calculator.updateDisplay();
 });
 
-$("btn-Bksp").addEventListener("click", () => {
-  displayValue = displayValue.toString().slice(0, -1);
-  if (displayValue == false) {
-    displayValue = "";
-    $("display-input").textContent = displayValue;
-    return;
-  }
-  displayValue = Number(displayValue);
-  console.log(displayValue);
-  $("display-input").textContent = displayValue;
+// Bksp button
+backspaceButton.addEventListener("click", () => {
+  calculator.backspace();
+  calculator.updateDisplay();
 });
 
-$("btn-.").addEventListener("click", () => {
-  if (displayValue.includes(".")) return;
-  else displayValue += ".";
-  $("display-input").textContent = displayValue;
+// Polarity button
+polarityButton.addEventListener("click", () => {
+  calculator.changePolarity();
 });
 
-//-----------------------------------------------------------------------
-// Operator btns
-$("btn-=").addEventListener("click", () => {});
-$("btn-*").addEventListener("click", () => {});
-$("btn-/").addEventListener("click", () => {});
-$("btn--").addEventListener("click", () => {});
-$("btn-+").addEventListener("click", () => {}});
-
-//-----------------------------------------------------------------------
-// Number btns
-$("btn-0").addEventListener("click", () => {
-  displayValue += 0;
-  $("display-input").textContent = displayValue;
+// Number buttons
+numberButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    calculator.appendNumber(button.innerText);
+    calculator.updateDisplay();
+  });
 });
 
-$("btn-1").addEventListener("click", () => {
-  displayValue += 1;
-  $("display-input").textContent = displayValue;
+// Operation buttons
+operationButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    calculator.chooseOperation(button.innerText);
+    calculator.updateDisplay();
+  });
 });
 
-$("btn-2").addEventListener("click", () => {
-  displayValue += 2;
-  $("display-input").textContent = displayValue;
+// Equals button
+equalsButton.addEventListener("click", () => {
+  calculator.compute();
+  calculator.updateDisplay();
 });
 
-$("btn-3").addEventListener("click", () => {
-  displayValue += 3;
-  $("display-input").textContent = displayValue;
-});
-
-$("btn-4").addEventListener("click", () => {
-  displayValue += 4;
-  $("display-input").textContent = displayValue;
-});
-
-$("btn-5").addEventListener("click", () => {
-  displayValue += 5;
-  $("display-input").textContent = displayValue;
-});
-
-$("btn-6").addEventListener("click", () => {
-  displayValue += 6;
-  $("display-input").textContent = displayValue;
-});
-
-$("btn-7").addEventListener("click", () => {
-  displayValue += 7;
-  $("display-input").textContent = displayValue;
-});
-
-$("btn-8").addEventListener("click", () => {
-  displayValue += 8;
-  $("display-input").textContent = displayValue;
-});
-
-$("btn-9").addEventListener("click", () => {
-  displayValue += 9;
-  $("display-input").textContent = displayValue;
+// Debug button
+debugButton.addEventListener("click", () => {
+  calculator.debug();
 });
