@@ -19,6 +19,7 @@ class Calculator {
   }
 
   appendNumber(number) {
+    if (!isFinite(this.currentOperand)) this.currentOperand = "";
     if (number === "." && this.currentOperand.includes(".")) return;
     this.currentOperand = this.currentOperand.toString() + number.toString();
   }
@@ -29,8 +30,7 @@ class Calculator {
   }
 
   chooseOperation(operation) {
-    if (this.currentOperand === "") return;
-    if (operation === "") return;
+    if (this.currentOperand === "" || operation === "") return;
     if (this.previousOperand !== "") {
       this.compute();
     }
@@ -42,8 +42,8 @@ class Calculator {
   compute() {
     let computation;
     const prev = parseFloat(this.previousOperand);
-    console.log(prev);
-    const current = parseFloat(this.currentOperand);
+    let current = parseFloat(this.currentOperand);
+    if (isNaN(current)) current = 0;
     if (isNaN(prev) || isNaN(current)) return;
     switch (this.operation) {
       case "+":
@@ -79,7 +79,7 @@ class Calculator {
       });
     }
     if (decimalDigits != null) {
-      return `${integerDisplay}.${decimalDigits}`;
+      return `${integerDisplay}.${decimalDigits.toString().slice(0, 8)}`;
     } else return integerDisplay;
   }
 
@@ -88,10 +88,14 @@ class Calculator {
       this.currentOperand
     );
     if (this.operation != null) {
-      this.previousOperandTextElement.innerText = `${this.previousOperand} ${this.operation}`;
+      this.previousOperandTextElement.innerText = `${this.previousOperand
+        .toString()
+        .slice(0, 10)} ${this.operation}`;
     }
     if (this.currentOperandTextElement.innerText === "")
       this.currentOperandTextElement.innerText = "0";
+    if (!isFinite(this.currentOperand))
+      currentOperandTextElement.innerText = "Nope.";
   }
 }
 
@@ -146,8 +150,6 @@ numberButtons.forEach(button => {
 // Operation buttons
 operationButtons.forEach(button => {
   button.addEventListener("click", () => {
-    // console.log(Number("087"));
-    // console.log(calculator.currentOperand);
     calculator.chooseOperation(button.innerText);
     calculator.updateDisplay();
   });

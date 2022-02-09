@@ -73,7 +73,7 @@ button {
 .previous-operand {
   min-height: 50px;
   border: 2px rgb(53, 53, 53) solid;
-  font-size: 2rem;
+  font-size: 1.9rem;
   padding: 8px 20px 8px 10px;
   word-wrap: break-word;
 }
